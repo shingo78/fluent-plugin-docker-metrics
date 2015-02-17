@@ -48,7 +48,10 @@ module Fluent
 
     def list_container_ids
       Docker::Container.all.map do |container|
-        [container.id, container.info["Names"].first]
+        name = container.info["Names"].find do |name|
+          name.match(/^\/?[a-zA-Z0-9_-]+$/)
+        end
+        [container.id, name]
       end
     end
 
